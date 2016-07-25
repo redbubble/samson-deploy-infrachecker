@@ -19,7 +19,10 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency 'rails', '~> 4.2', '>= 4.2.6'
   s.add_runtime_dependency 'faraday', '~> 0.9.0'
+  s.add_runtime_dependency 'faraday_middleware'
+  s.add_runtime_dependency 'httpclient', '~> 2.8.0'
   s.add_development_dependency "minitest", '~> 5.9.0'
   s.add_development_dependency "maxitest", '~> 2.0.2'
   s.add_development_dependency "pry"
+  s.add_development_dependency "mocha"
 end

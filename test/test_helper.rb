@@ -9,3 +9,4 @@ load "#{File.dirname(__FILE__)}/../lib/samson_deploy_infrachecker/deploy_infrach
 # Filter out Minitest backtrace while allowing backtrace from other libraries
 # to be shown.
 Minitest.backtrace_filter = Minitest::BacktraceFilter.new
+require 'mocha/mini_test'
