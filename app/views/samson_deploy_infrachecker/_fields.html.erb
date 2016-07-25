@@ -1,0 +1,15 @@
+<fieldset>
+  <h4>Auto deploy condition</h4>
+  <div class="form-group col-lg-4">
+    <%= form.check_box :check_infraspec_before_autodeploy %>
+    <%= form.label :check_infraspec_before_autodeploy, class: "control-label" %>
+    <p class="help-block">Only auto deploy releases when infrastructure-spec is green.</p>
+  </div>
+  <div class="form-group">
+    <%= form.label :buildkite_api_token, class: "col-lg-2 control-label" %>
+    <div class="col-lg-4">
+      <%= form.password_field :buildkite_api_token, class: "form-control" %>
+      <p class="help-block">Enter the buildkite API token here. The API token should have "Read Builds" permission.</p>
+    </div>
+  </div>
+</fieldset>
