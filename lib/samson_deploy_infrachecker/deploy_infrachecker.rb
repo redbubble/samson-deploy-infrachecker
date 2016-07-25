@@ -1,12 +1,15 @@
 require 'jsonclient'
 
+#
 module SamsonDeployInfrachecker
   class DeployInfrachecker
 
-    def check_build_status
+    def check_build_status(project)
       client = JSONClient.new
+
       url = 'https://api.buildkite.com/v2/organizations/redbubble/pipelines/infrastructure-spec/builds'
-      header = { 'Authorization' => 'Bearer a78e781a75894c0915ac9ca9fcad42c08d91511c' }
+      header = { "Authorization" => "Bearer #{project.buildkite_api_token}" }
+
       response = client.get(url, nil, header)
       body = response.body
 

@@ -6,63 +6,63 @@ require 'mocha/mini_test'
 
 describe SamsonDeployInfrachecker::DeployInfrachecker do
   let(:infrachecker) { SamsonDeployInfrachecker::DeployInfrachecker.new }
+  let(:response_body) { [] }
+  let(:project) { mock()}
+  let(:response) { mock() }
 
   before do
-    response = mock()
-    response.expects(:body).returns([{state: "running" }, {state: "passed"}])
-    JSONClient.any_instance.stubs(:get).with('https://api.buildkite.com/v2/organizations/redbubble/pipelines/infrastructure-spec/builds', nil, { 'Authorization' => 'Bearer a78e781a75894c0915ac9ca9fcad42c08d91511c' }).returns(response)
+    response.expects(:body).returns(response_body)
+    project.expects(:buildkite_api_token).returns('abc')
+
+    JSONClient.any_instance.stubs(:get).with('https://api.buildkite.com/v2/organizations/redbubble/pipelines/infrastructure-spec/builds', nil, { 'Authorization' => 'Bearer abc' }).returns(response)
   end
 
-  it 'is true when infrastructure spec last build is green' do
-    assert_equal true, infrachecker.check_build_status
-  end
-end
+  describe 'when current build is running and last build is passed' do
+    let(:response_body) { [{state: "running" }, {state: "passed"}] }
 
-private
-
-def infraspec_connection_build_running_passed
-  Faraday.new do |builder|
-
-    builder.adapter :test do |stubs|
-      stubs.get("/v2/organizations/redbubble/pipelines/infrastructure-spec/builds", { "@body" => [{state: "running" }, {state: "passed"}]})
+    it 'is true' do
+      assert_equal true, infrachecker.check_build_status(project)
     end
   end
-end
 
-def infraspec_connection_build_passed_failed
-  Faraday.new do |builder|
+  describe 'when current build is passed and last build is failed' do
+    let(:response_body) { [{state: "passed" }, {state: "failed"}] }
 
-    builder.adapter :test do |stubs|
-      stubs.get("/v2/organizations/redbubble/pipelines/infrastructure-spec/builds", [{state: "passed" }, {state: "failed"}])
+    it 'is true' do
+      assert_equal true, infrachecker.check_build_status(project)
     end
   end
-end
 
+  describe 'when current build is passed and last build is passed' do
+    let(:response_body) { [{state: "passed" }, {state: "passed"}] }
 
-def infraspec_connection_build_all_failed
-  Faraday.new do |builder|
-
-    builder.adapter :test do |stubs|
-      stubs.get("/v2/organizations/redbubble/pipelines/infrastructure-spec/builds", [{state: "failed" }, {state: "failed"}])
+    it 'is true' do
+      assert_equal true, infrachecker.check_build_status(project)
     end
   end
-end
 
-def infraspec_connection_build_running_failed
-  Faraday.new do |builder|
+  describe 'when current build is running and last build is failed' do
+    let(:response_body) { [{state: "running" }, {state: "failed"}] }
 
-    builder.adapter :test do |stubs|
-      stubs.get("/v2/organizations/redbubble/pipelines/infrastructure-spec/builds", [{state: "running" }, {state: "failed"}])
+    it 'is false' do
+      assert_equal false, infrachecker.check_build_status(project)
     end
   end
-end
 
+  describe 'when current build is failed and last build is passed' do
+    let(:response_body) { [{state: "failed" }, {state: "passed"}] }
 
-def infraspec_connection_build_failed_passed
-  Faraday.new do |builder|
-
-    builder.adapter :test do |stubs|
-      stubs.get("/v2/organizations/redbubble/pipelines/infrastructure-spec/builds", [{state: "failed" }, {state: "passed"}])
+    it 'is false' do
+      assert_equal false, infrachecker.check_build_status(project)
     end
   end
+
+  describe 'when current build is failed and last build is failed' do
+    let(:response_body) { [{state: "faild" }, {state: "failed"}] }
+
+    it 'is false' do
+      assert_equal false, infrachecker.check_build_status(project)
+    end
+  end
+
 end
