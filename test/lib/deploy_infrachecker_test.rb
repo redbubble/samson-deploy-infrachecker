@@ -1,47 +1,63 @@
 require_relative '../test_helper'
-
+require 'faraday'
 require 'ostruct'
 
 describe SamsonDeployInfrachecker::DeployInfrachecker do
-  let(:infrachecker) { DeployInfrachecker.new }
+  let(:infrachecker) { SamsonDeployInfrachecker::DeployInfrachecker.new }
 
   it 'is true when infrastructure spec last build is green' do
-    infrachecker.stubs(:infraspec_connection).returns(infraspec_connection_build_passed)
-
-    assert_equal true, infrachecker.check_build_status
+    infrachecker.stub(:infraspec_connection, infraspec_connection_build_passed_failed) do
+      assert_equal true, infrachecker.check_build_status
+    end
   end
 end
 
 
 private
 
-def infraspec_connection_build_running
+def infraspec_connection_build_running_passed
   Faraday.new do |builder|
-    builder.response :json
 
     builder.adapter :test do |stubs|
-      stubs.get("/v2/organizations/redbubble/pipelines/infrastructure-spec/builds", [{state: "running" }, {stage: "passed"}])
+      stubs.get("/v2/organizations/redbubble/pipelines/infrastructure-spec/builds", [{state: "running" }, {state: "passed"}])
     end
   end
 end
 
-def infraspec_connection_build_passed
+def infraspec_connection_build_passed_failed
   Faraday.new do |builder|
-    builder.response :json
 
     builder.adapter :test do |stubs|
-      stubs.get("/v2/organizations/redbubble/pipelines/infrastructure-spec/builds", [{state: "passed" }, {stage: "failed"}])
+      stubs.get("/v2/organizations/redbubble/pipelines/infrastructure-spec/builds", [{state: "passed" }, {state: "failed"}])
     end
   end
 end
 
 
-def infraspec_connection_build_failed
+def infraspec_connection_build_all_failed
   Faraday.new do |builder|
-    builder.response :json
 
     builder.adapter :test do |stubs|
-      stubs.get("/v2/organizations/redbubble/pipelines/infrastructure-spec/builds", [{state: "failed" }, {stage: "passed"}])
+      stubs.get("/v2/organizations/redbubble/pipelines/infrastructure-spec/builds", [{state: "failed" }, {state: "failed"}])
+    end
+  end
+end
+
+def infraspec_connection_build_running_failed
+  Faraday.new do |builder|
+
+    builder.adapter :test do |stubs|
+      stubs.get("/v2/organizations/redbubble/pipelines/infrastructure-spec/builds", [{state: "running" }, {state: "failed"}])
+    end
+  end
+end
+
+
+def infraspec_connection_build_failed_passed
+  Faraday.new do |builder|
+
+    builder.adapter :test do |stubs|
+      stubs.get("/v2/organizations/redbubble/pipelines/infrastructure-spec/builds", [{state: "failed" }, {state: "passed"}])
     end
   end
 end
