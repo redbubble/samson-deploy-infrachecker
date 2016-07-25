@@ -1,6 +1,5 @@
 require 'jsonclient'
 
-#
 module SamsonDeployInfrachecker
   class DeployInfrachecker
 

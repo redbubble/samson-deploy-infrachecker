@@ -6,6 +6,6 @@ end
 
 Samson::Hooks.view :project_form, "samson_deploy_infrachecker/fields"
 
-Samson::Hooks.callback :release_deploy_conditions do |stage, release|
-
+Samson::Hooks.callback :release_deploy_conditions do |_, release|
+  DeployInfrachecker.new.check_build_status(release.project)
 end
