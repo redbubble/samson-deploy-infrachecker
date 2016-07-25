@@ -1,35 +1,22 @@
 require_relative '../test_helper'
-require 'faraday'
 require 'ostruct'
 require 'mocha'
-
-
 require 'minitest/unit'
 require 'mocha/mini_test'
 
 describe SamsonDeployInfrachecker::DeployInfrachecker do
   let(:infrachecker) { SamsonDeployInfrachecker::DeployInfrachecker.new }
-  #
-
 
   before do
-
-    stubs = Faraday::Adapter::Test::Stubs.new do |stub|
-      stub.get("/v2/organizations/redbubble/pipelines/infrastructure-spec/builds") { |env| [200, {}, 'a thing'] }
-    end
-
-    test = Faraday.new do |builder|
-      builder.adapter :test, stubs do |stub|
-        stub.get('/v2/organizations/redbubble/pipelines/infrastructure-spec/builds') { |env| [ 200, {}, 'shrimp' ]}
-      end
-    end
+    response = mock()
+    response.expects(:body).returns([{state: "running" }, {state: "passed"}])
+    JSONClient.any_instance.stubs(:get).with('https://api.buildkite.com/v2/organizations/redbubble/pipelines/infrastructure-spec/builds', nil, { 'Authorization' => 'Bearer a78e781a75894c0915ac9ca9fcad42c08d91511c' }).returns(response)
   end
 
   it 'is true when infrastructure spec last build is green' do
     assert_equal true, infrachecker.check_build_status
   end
 end
-
 
 private
 

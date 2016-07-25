@@ -8,14 +8,10 @@ module SamsonDeployInfrachecker
       url = 'https://api.buildkite.com/v2/organizations/redbubble/pipelines/infrastructure-spec/builds'
       header = { 'Authorization' => 'Bearer a78e781a75894c0915ac9ca9fcad42c08d91511c' }
       response = client.get(url, nil, header)
+      body = response.body
 
-      require 'pry'; binding.pry
-      response.each {|r| puts r}
-      last_finished_build = response.body.detect{|r| r[:state] != 'runnning'}
-      last_finished_build == 'passed'
+      last_finished_build = body.detect{|r| r[:state] != 'running'}
+      last_finished_build[:state] == 'passed'
     end
-
-    private
-
   end
 end
