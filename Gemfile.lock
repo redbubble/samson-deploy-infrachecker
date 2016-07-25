@@ -2,7 +2,6 @@ PATH
   remote: .
   specs:
     deploy_infrachecker (0.0.1)
-      httpclient (~> 2.8)
       rails (~> 4.2, >= 4.2.6)
 
 GEM
@@ -115,6 +114,7 @@ PLATFORMS
 
 DEPENDENCIES
   deploy_infrachecker!
+  httpclient (~> 2.8.0)
   maxitest (~> 2.0.2)
   minitest (~> 5.9.0)
   mocha
