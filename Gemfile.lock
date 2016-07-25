@@ -114,7 +114,7 @@ PLATFORMS
 
 DEPENDENCIES
   deploy_infrachecker!
-  httpclient (~> 2.7.0)
+  httpclient
   maxitest (~> 2.0.2)
   minitest (~> 5.9.0)
   mocha
