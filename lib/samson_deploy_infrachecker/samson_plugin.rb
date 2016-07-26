@@ -1,6 +1,6 @@
+require_relative './deploy_infrachecker'
 module SamsonDeployInfrachecker
   class Engine < ::Rails::Engine
-    isolate_namespace SamsonDeployInfrachecker
   end
 end
 
