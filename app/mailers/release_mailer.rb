@@ -6,7 +6,7 @@ class ReleaseMailer < ApplicationMailer
 
     mail(
       to: emails,
-      subject: "[AUTO-DEPLOY] Your code change to #{@release.project.name} is not deployed to #{@stage.name} because infrastructure-spec is broken.",
+      subject: "[NO-AUTO-DEPLOY] Your code change to #{@release.project.name} is not deployed to #{@stage.name} because infrastructure-spec is broken.",
       template_name: "infrachecker_failed_email"
     )
   end
