@@ -1,0 +1,10 @@
+<h1>
+  Your code change to <%= "#{@release.project.name}" %> is not auto-deployed to <%= "#{@stage.name}" %> because infrastructure-spec is broken, auto deploy will be resumed after infrastructure-spec is green again.
+  Manual deploy is still possible.
+</h1>
+
+<h3>Commits</h3>
+<%= render 'changeset/commits', changeset: @changeset %>
+
+<h3>Pull Requests</h3>
+<%= render 'changeset/pulls', changeset: @changeset %>

@@ -1,4 +1,4 @@
-require_relative './deploy_infrachecker'
+require_relative '../infrachecker_failed_mailer'
 module SamsonDeployInfrachecker
   class Engine < ::Rails::Engine
   end
@@ -10,7 +10,11 @@ Samson::Hooks.callback :project_permitted_params do
   [:check_infraspec_before_autodeploy, :buildkite_api_token]
 end
 
-Samson::Hooks.callback :release_deploy_conditions do |_, release|
+Samson::Hooks.callback :release_deploy_conditions do |stage, release|
   project = release.project
-  !project.check_infraspec_before_autodeploy || SamsonDeployInfrachecker::DeployInfrachecker.new.check_build_status(project)
+  return true if !project.check_infraspec_before_autodeploy
+
+  infrastructue_build_status = SamsonDeployInfrachecker::DeployInfrachecker.new.check_build_status(project)
+  InfracheckerFailedMailer.deliver_failed_email(release, stage) unless infrastructue_build_status
+  infrastructue_build_status
 end
