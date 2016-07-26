@@ -11,5 +11,5 @@ Samson::Hooks.callback :project_permitted_params do
 end
 
 Samson::Hooks.callback :release_deploy_conditions do |_, release|
-  DeployInfrachecker.new.check_build_status(release.project)
+  SamsonDeployInfrachecker::DeployInfrachecker.new.check_build_status(release.project)
 end
