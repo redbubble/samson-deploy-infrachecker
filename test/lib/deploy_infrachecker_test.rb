@@ -18,7 +18,7 @@ describe SamsonDeployInfrachecker::DeployInfrachecker do
   end
 
   describe 'when current build is running and last build is passed' do
-    let(:response_body) { [{state: "running" }, {state: "passed"}] }
+    let(:response_body) { [{"state" => "running" }, {"state" => "passed"}] }
 
     it 'is true' do
       assert_equal true, infrachecker.check_build_status(project)
@@ -26,7 +26,7 @@ describe SamsonDeployInfrachecker::DeployInfrachecker do
   end
 
   describe 'when current build is passed and last build is failed' do
-    let(:response_body) { [{state: "passed" }, {state: "failed"}] }
+    let(:response_body) { [{"state" => "passed" }, {"state" => "failed"}] }
 
     it 'is true' do
       assert_equal true, infrachecker.check_build_status(project)
@@ -34,7 +34,7 @@ describe SamsonDeployInfrachecker::DeployInfrachecker do
   end
 
   describe 'when current build is passed and last build is passed' do
-    let(:response_body) { [{state: "passed" }, {state: "passed"}] }
+    let(:response_body) { [{"state" => "passed" }, {"state" => "passed"}] }
 
     it 'is true' do
       assert_equal true, infrachecker.check_build_status(project)
@@ -42,7 +42,7 @@ describe SamsonDeployInfrachecker::DeployInfrachecker do
   end
 
   describe 'when current build is running and last build is failed' do
-    let(:response_body) { [{state: "running" }, {state: "failed"}] }
+    let(:response_body) { [{"state" => "running" }, {"state" => "failed"}] }
 
     it 'is false' do
       assert_equal false, infrachecker.check_build_status(project)
@@ -50,7 +50,7 @@ describe SamsonDeployInfrachecker::DeployInfrachecker do
   end
 
   describe 'when current build is failed and last build is passed' do
-    let(:response_body) { [{state: "failed" }, {state: "passed"}] }
+    let(:response_body) { [{"state" => "failed" }, {"state" => "passed"}] }
 
     it 'is false' do
       assert_equal false, infrachecker.check_build_status(project)
@@ -58,7 +58,7 @@ describe SamsonDeployInfrachecker::DeployInfrachecker do
   end
 
   describe 'when current build is failed and last build is failed' do
-    let(:response_body) { [{state: "faild" }, {state: "failed"}] }
+    let(:response_body) { [{"state" => "faild" }, {"state" => "failed"}] }
 
     it 'is false' do
       assert_equal false, infrachecker.check_build_status(project)

@@ -11,9 +11,8 @@ module SamsonDeployInfrachecker
 
       response = client.get(url, nil, header)
       body = response.body
-
-      last_finished_build = body.detect{|r| r[:state] != 'running'}
-      last_finished_build[:state] == 'passed'
+      last_finished_build = body.detect{|r| r["state"] != 'running'}
+      last_finished_build["state"] == 'passed'
     end
   end
 end
