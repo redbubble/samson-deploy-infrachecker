@@ -6,7 +6,8 @@ module SamsonDeployInfrachecker
     def check_build_status(project)
       client = JSONClient.new
 
-      url = 'https://api.buildkite.com/v2/organizations/redbubble/pipelines/infrastructure-spec/builds'
+      # url = 'https://api.buildkite.com/v2/organizations/redbubble/pipelines/infrastructure-spec/builds'
+      url = 'https://api.buildkite.com/v2/organizations/redbubble/pipelines/dockercloud-hello-world/builds'
       header = { "Authorization" => "Bearer #{project.buildkite_api_token}" }
 
       response = client.get(url, nil, header)
