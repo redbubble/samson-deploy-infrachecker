@@ -12,9 +12,11 @@ end
 
 Samson::Hooks.callback :release_deploy_conditions do |stage, release|
   project = release.project
-  return true if !project.check_infraspec_before_autodeploy
-
-  infrastructue_build_status = SamsonDeployInfrachecker::DeployInfrachecker.new.check_build_status(project)
-  InfracheckerFailedMailer.deliver_failed_email(release, stage) unless infrastructue_build_status
-  infrastructue_build_status
+  check_infraspec = project.check_infraspec_before_autodeploy
+  auto_deploy = true
+  if check_infraspec
+    auto_deploy = SamsonDeployInfrachecker::DeployInfrachecker.new.check_build_status(project)
+    InfracheckerFailedMailer.deliver_failed_email(release, stage) unless auto_deploy
+  end
+  auto_deploy
 end
