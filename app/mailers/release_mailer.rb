@@ -1,4 +1,5 @@
 class ReleaseMailer < ApplicationMailer
+  add_template_helper(DeploysHelper)
   add_template_helper(ApplicationHelper)
 
   def infrachecker_failed_email(release, stage, emails)
